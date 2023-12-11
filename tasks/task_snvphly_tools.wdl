@@ -23,6 +23,7 @@ task find_repeats {
   }
 }
 
+
 task verify_map_q {
   input {
     String samplename
@@ -46,8 +47,8 @@ task verify_map_q {
     preemptible: 0
     maxRetries: 1
   }
-
 }
+
 
 task filter_and_bcf {
   input {
@@ -63,8 +64,7 @@ task filter_and_bcf {
     # vcf to bcf
     bcftools index -f ~{samplename}.freebayes.filtered.vcf.gz
     bcftools view --output-type b --output-file ~{samplename}.freebayes.filtered.bcf ~{samplename}.freebayes.filtered.vcf.gz
-    bcftools index -f ~{samplename}.freebayes.filtered.bcf 
-
+    bcftools index -f ~{samplename}.freebayes.filtered.bcf
   >>>
 
   output {
@@ -82,6 +82,7 @@ task filter_and_bcf {
     maxRetries: 1
   }
 }
+
 
 task consolidate_bcf {
   input {
