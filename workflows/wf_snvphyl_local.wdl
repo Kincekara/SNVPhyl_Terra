@@ -3,6 +3,7 @@ version 1.0
 import "../tasks/task_smalt.wdl" as smalt
 import "../tasks/task_snvphly_tools.wdl" as tools
 import "../tasks/task_vcf2snv.wdl" as vcf2snv
+import "../tasks/task_phyml.wdl" as phyml
 
 import "wf_variants.wdl" as variants
 
@@ -42,11 +43,38 @@ workflow snvphyl {
     }
   }
 
+  call tools.verify_map_q {
+    input:
+      sorted_bams = variants.sorted_bam,
+      sorted_bam_bais = variants.sorted_bam_bai
+  }
+
   call vcf2snv.vcf2snv {
     input:
       filtered_densities = variants.filtered_density,
       consolidated_bcfs = variants.consolidated_bcf,
+      consolidated_bcfs_csis = variants.consolidated_bcf_csi,
       invalid_positions = find_repeats.invalid_positions,
       reference = index.reference
+  }
+
+  call tools.stats_and_matrix {
+    input:
+      snvtable = vcf2snv.snvtable,
+      snvalignment = vcf2snv.snvalignment
+  }
+
+  call phyml.phyml {
+    input:
+      snvalignment = vcf2snv.snvalignment
+  }
+
+  output {
+    File mapping_quality = verify_map_q.mapping_quality
+    File vcf2core = vcf2snv.vcf2core
+    File filter_stats = stats_and_matrix.filterstats
+    File snv_matrix = stats_and_matrix.snvmatrix
+    File phyml_tree = phyml.tree
+    File phyml_tree_stats = phyml.treestats
   }
 }

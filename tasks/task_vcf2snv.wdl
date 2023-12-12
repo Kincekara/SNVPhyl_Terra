@@ -4,38 +4,31 @@ task vcf2snv {
   input {
     Array[File] filtered_densities
     Array[File] consolidated_bcfs
+    Array[File] consolidated_bcfs_csis
     File invalid_positions
     File reference
   }
 
   command <<<
     # merge filtered densities
-    fpaths=~{filtered_densities}
-    for i in "${fpaths[@]}"; do
-      cat "$i.file"
+    fpaths=(~{sep=' ' filtered_densities})
+    for file in ${fpaths[@]}; do
+      cat $file
     done > filtered_density_all.txt
 
     # merge filtered densities and invalid positions
     cat filtered_density_all.txt ~{invalid_positions}> new_invalid_positions.bed
 
     # prep bcfs
-    for i in ~{consolidated_bcfs}; do
-      fname=$(basename $i _consolidated.bcf)
+    bpath=(~{sep=' ' consolidated_bcfs})
+    for f in ${bpath[@]}; do
+      fname=$(basename $f .consolidated.bcf)
       echo "--consolidate_vcf $fname=$f " | tr -d "\n" >> consolidation_line.txt
     done
-    consolidate_bcfs=$(cat consolidation_line.txt)
+    consolidate_cmd=$(cat consolidation_line.txt)
 
     # vcf2snv
-    vcf2snv_alignment.pl \
-    --reference reference \
-    --invalid-pos new_invalid_positions.bed \
-    --format fasta \
-    --format phylip 
-    --numcpus 4 
-    --output-base snvalign \
-    --fasta ~{reference} \
-    $consolidate_bcfs
-
+    vcf2snv_alignment.pl --reference reference --invalid-pos new_invalid_positions.bed --format fasta --format phylip --numcpus 4 --output-base snvalign --fasta ~{reference} $consolidate_cmd
     mv snvalign-positions.tsv snvTable.tsv
     mv snvalign-stats.csv vcf2core.tsv
     if [[ -f snvalign.phy ]]; then

@@ -26,17 +26,25 @@ task find_repeats {
 
 task verify_map_q {
   input {
-    String samplename
-    File sorted_bam
-    File sorted_bam_bai
+    Array[File] sorted_bams
+    Array[File] sorted_bam_bais
   }
 
-  command <<<    
-    verify_mapping_quality.pl -c 4 --min-depth 10 --min-map 80 --output ~{samplename}.mappingQuality.txt --bam bam1=~{sorted_bam}
+  command <<<
+  # prep bams
+  bams=(~{sep=' ' sorted_bams})
+  count=0 
+  for f in ${bams[@]}; do
+    ((count++))
+    echo "--bam bam$count=$f " | tr -d "\n" >> bam_line.txt
+  done
+  bam_cmd=$(cat bam_line.txt)
+  # mapping quality
+  verify_mapping_quality.pl -c 4 --min-depth 10 --min-map 80 --output mappingQuality.txt $bam_cmd
   >>>
 
   output {
-    File mapping_quality = "~{samplename}.mappingQuality.txt"
+    File mapping_quality = "mappingQuality.txt"
   }
 
   runtime {
@@ -109,6 +117,35 @@ task consolidate_bcf {
   runtime {
     docker: "staphb/snvphyl-tools:1.8.2"
     memory: "30 GB"
+    cpu: 1
+    disks: "local-disk 100 SSD"
+    preemptible: 0
+    maxRetries: 1
+  }
+}
+
+
+task stats_and_matrix {
+  input {
+    File snvtable
+    File snvalignment
+  }
+
+  command <<<
+    # filter stats
+    filter-stats.pl -i ~{snvtable} -a > filterStats.txt
+    # snv matrix
+    snv_matrix.pl ~{snvalignment} -o snvMatrix.tsv
+  >>>
+
+  output {
+    File filterstats = "filterStats.txt"
+    File snvmatrix = "snvMatrix.tsv"
+  }
+
+  runtime {
+    docker: "staphb/snvphyl-tools:1.8.2"
+    memory: "1 GB"
     cpu: 1
     disks: "local-disk 100 SSD"
     preemptible: 0
