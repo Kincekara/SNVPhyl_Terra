@@ -1,7 +1,7 @@
 version 1.0
 
 import "../tasks/task_smalt.wdl" as smalt
-import "../tasks/task_snvphly_tools.wdl" as tools
+import "../tasks/task_snvphyl_tools.wdl" as tools
 import "../tasks/task_freebayes.wdl" as freebayes
 import "../tasks/task_bcftools.wdl" as bcftools
 

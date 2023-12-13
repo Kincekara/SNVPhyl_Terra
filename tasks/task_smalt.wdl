@@ -7,9 +7,6 @@ task index {
   }
 
   command <<<
-    # version
-    smalt version | grep Version | cut -d " " -f2 | tee VERSION
-
     smalt index -k 13 -s 6 ~{filename} ~{genome}
     cp ~{genome} ./~{filename}
     samtools faidx ~{filename}
