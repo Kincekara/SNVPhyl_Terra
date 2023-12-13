@@ -21,14 +21,16 @@ task validate_inputs {
       for (( i=0; i<$len; i++ )); do
         f1=$(basename $r1[i])
         f2=$(basename $r2[i])
-        if [ $f1 == $f2]; then
+        if [ $f1 = $f2 ]; then
           echo "Same read1 and read2 provided for $samples[i]"
           echo "FAIL" > INPUT.CHECK
         fi        
       done
       # create samples.tsv
       for (( i=0; i<$len; i++ )); do
-        echo -e "${samples[i]}\t${r1[i]}\t${r2[i]}" >> "samples.tsv"
+        read1=$(echo ${r1[i]} | sed 's/\/cromwell_root/gs\:\//g')
+        read2=$(echo ${r2[i]} | sed 's/\/cromwell_root/gs\:\//g')
+        echo -e "${samples[i]}\t$read1\t$read2" >> "samples.tsv"
       done
     else
       echo "Missing reads file!"
