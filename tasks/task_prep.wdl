@@ -38,10 +38,10 @@ task validate_inputs {
     # check reference genome
     if [ -f "~{reference}" ]; then
       mv ~{reference} reference.fasta
-    elif [ -z "~{accession}" ]; then
+    elif [ -n "~{accession}" ]; then
       datasets download genome accession ~{accession} --include genome --filename reference.zip
       unzip -j -p reference.zip *.fna > reference.fasta
-    elif [ -z "~{taxon}" ]; then
+    elif [ -n "~{taxon}" ]; then
       id=$(datasets summary genome taxon "~{taxon}" --reference | cut -d "," -f1 | cut -d ":" -f3 | sed 's/\"//g')
       datasets download genome accession $id --include genome --filename reference.zip
       unzip -j -p reference.zip *.fna > reference.fasta
