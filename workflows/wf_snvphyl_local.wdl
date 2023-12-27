@@ -4,6 +4,7 @@ import "../tasks/task_smalt.wdl" as smalt
 import "../tasks/task_snvphyl_tools.wdl" as tools
 import "../tasks/task_vcf2snv.wdl" as vcf2snv
 import "../tasks/task_phyml.wdl" as phyml
+import "../tasks/task_report.wdl" as report
 
 import "wf_variants.wdl" as variants
 
@@ -69,6 +70,14 @@ workflow snvphyl {
       snvalignment = vcf2snv.snvalignment
   }
 
+  call report.create_report {
+    input:
+      matrix = stats_and_matrix.snvmatrix,
+      reference = reference,
+      vcf2core = vcf2snv.vcf2core,
+      newick = phyml.tree
+  }
+
   output {
     File mapping_quality = verify_map_q.mapping_quality
     File vcf2core = vcf2snv.vcf2core
@@ -76,5 +85,6 @@ workflow snvphyl {
     File snv_matrix = stats_and_matrix.snvmatrix
     File phyml_tree = phyml.tree
     File phyml_tree_stats = phyml.treestats
+    File summary_report = create_report.summary_report
   }
 }
