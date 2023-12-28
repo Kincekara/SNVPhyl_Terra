@@ -18,6 +18,8 @@ workflow snvphyl_terra {
     String? accession
     Int? window_size
     Int? density_threshold
+    String? colorscale
+    Int? tree_width
   }
 
   call prep.validate_inputs {
@@ -36,7 +38,9 @@ workflow snvphyl_terra {
       inputSamplesFile = validate_inputs.samplelist,
       reference = validate_inputs.ref_genome,
       window_size = window_size,
-      density_threshold = density_threshold
+      density_threshold = density_threshold,
+      colorscale = colorscale,
+      tree_width = tree_width
     }
   }
 

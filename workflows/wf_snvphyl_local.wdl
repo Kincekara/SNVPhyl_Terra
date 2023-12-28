@@ -15,6 +15,8 @@ workflow snvphyl {
     File reference
     Int window_size = 11
     Int density_threshold = 2
+    String? colorscale
+    Int? tree_width
   }
 
   call smalt.index {
@@ -75,7 +77,9 @@ workflow snvphyl {
       matrix = stats_and_matrix.snvmatrix,
       reference = reference,
       vcf2core = vcf2snv.vcf2core,
-      newick = phyml.tree
+      newick = phyml.tree,
+      colorscale = colorscale,
+      tree_width = tree_width
   }
 
   output {
