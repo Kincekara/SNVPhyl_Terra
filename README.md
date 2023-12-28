@@ -26,9 +26,9 @@ SNVPhyl_Terra requires a sample set to run.
 | samplename | this.*{sampleset name}s*.*{id}* | required|
 | taxon | *"{reference taxon}"* | required |
 | accession | *{reference accession number}* | optional |
-|reference | *{reference.fasta}* | optional |
-|window_size | *{integer} (default: 11)* | optional |
-|density_threshold | *{integer} (default: 2 )* | optional |
+| reference | *{reference.fasta}* | optional |
+| window_size | *{integer} (default: 11)* | optional |
+| density_threshold | *{integer} (default: 2 )* | optional |
 
 
 ## Local Run
