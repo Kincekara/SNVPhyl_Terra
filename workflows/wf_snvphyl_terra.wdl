@@ -49,5 +49,6 @@ workflow snvphyl_terra {
     File? snv_matrix = snvphyl.snv_matrix
     File? phyml_tree = snvphyl.phyml_tree
     File? phyml_tree_stats = snvphyl.phyml_tree_stats
+    File? summary_report = snvphyl.summary_report
   }
 }
