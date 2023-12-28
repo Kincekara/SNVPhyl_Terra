@@ -6,8 +6,8 @@ task create_report {
     File vcf2core
     File matrix
     File newick
-    String? colorscale = "YlGn_r"
-    Int? tree_width = 600
+    String colorscale = "YlGn_r"
+    Int tree_width = 600
   }
 
   command <<<
