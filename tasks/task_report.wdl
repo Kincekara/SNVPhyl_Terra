@@ -42,6 +42,7 @@ task create_report {
 
     # remove reference from tree
     nwk = re.sub('reference:[0-9]+\\.[0-9]+,', '', nwk)
+    nwk = re.sub(',reference:[0-9]+\\.[0-9]+', '', nwk)
 
     # draw tree
     tre = toytree.tree(nwk, tree_format=0)
