@@ -3,10 +3,12 @@ version 1.0
 task find_repeats {
   input {
     File genome
+    Int min_length = 150
+    Int min_pid = 90
   }
 
   command <<<
-    find-repeats.pl ~{genome} --min-length 150 --min-pid 90 > invalid_positions.bed
+    find-repeats.pl ~{genome} --min-length ~{min_length} --min-pid ~{min_pid} > invalid_positions.bed
   >>>
 
   output {
@@ -28,6 +30,7 @@ task verify_map_q {
   input {
     Array[File] sorted_bams
     Array[File] sorted_bam_bais
+    Int min_depth
   }
 
   command <<<
@@ -40,7 +43,7 @@ task verify_map_q {
   done
   bam_cmd=$(cat bam_line.txt)
   # mapping quality
-  verify_mapping_quality.pl -c 4 --min-depth 10 --min-map 80 --output mappingQuality.txt $bam_cmd
+  verify_mapping_quality.pl -c 4 --min-depth ~{min_depth} --min-map 80 --output mappingQuality.txt $bam_cmd
   >>>
 
   output {
@@ -100,10 +103,11 @@ task consolidate_bcf {
     File filtered_csi
     Int window_size
     Int density_threshold
+    Int min_coverage
   }
 
   command <<<
-    consolidate_vcfs.pl --coverage-cutoff 10 --min-mean-mapping 30 --snv-abundance-ratio 0.75 --vcfsplit ~{filtered_bcf} --mpileup ~{mpileup_bcf} --filtered-density-out ~{samplename}.filtered-density.txt --window-size ~{window_size} --density-threshold ~{density_threshold} -o ~{samplename}.consolidated.bcf > ~{samplename}.consolidated.vcf
+    consolidate_vcfs.pl --coverage-cutoff ~{min_coverage} --min-mean-mapping 30 --snv-abundance-ratio 0.75 --vcfsplit ~{filtered_bcf} --mpileup ~{mpileup_bcf} --filtered-density-out ~{samplename}.filtered-density.txt --window-size ~{window_size} --density-threshold ~{density_threshold} -o ~{samplename}.consolidated.bcf > ~{samplename}.consolidated.vcf
     bcftools index -f ~{samplename}.consolidated.bcf
   >>>
 

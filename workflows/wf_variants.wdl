@@ -14,6 +14,7 @@ workflow variants {
     File read2
     Int window_size
     Int density_threshold
+    Int min_coverage
     File genome
     File fai
     File sma
@@ -58,7 +59,8 @@ workflow variants {
       filtered_bcf = filter_and_bcf.filtered_bcf,
       filtered_csi = filter_and_bcf.filtered_csi,
       window_size = window_size,
-      density_threshold = density_threshold
+      density_threshold = density_threshold,
+      min_coverage = min_coverage
   }
  
   output {

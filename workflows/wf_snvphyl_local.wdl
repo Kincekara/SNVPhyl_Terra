@@ -15,6 +15,7 @@ workflow snvphyl {
     File reference
     Int window_size = 11
     Int density_threshold = 2
+    Int min_coverage = 10
     String? colorscale
     Int? tree_width
   }
@@ -41,7 +42,8 @@ workflow snvphyl {
         sma = index.sma,
         smi = index.smi,        
         window_size = window_size,
-        density_threshold = density_threshold
+        density_threshold = density_threshold,
+        min_coverage = min_coverage
 
     }
   }
@@ -49,7 +51,8 @@ workflow snvphyl {
   call tools.verify_map_q {
     input:
       sorted_bams = variants.sorted_bam,
-      sorted_bam_bais = variants.sorted_bam_bai
+      sorted_bam_bais = variants.sorted_bam_bai,
+      min_depth = min_coverage
   }
 
   call vcf2snv.vcf2snv {

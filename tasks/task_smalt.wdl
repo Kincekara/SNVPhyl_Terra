@@ -38,11 +38,13 @@ task map {
     File fai
     File sma
     File smi
+    Int min_insert_size = 20
+    Int max_insert_size = 1000
   }
 
   command <<<
     # map reads
-    smalt map -f bam -n 4 -l pe -i 1000 -j 20 -r 1 -y 0.5 -o ~{samplename}.bam ~{genome} ~{read1} ~{read2}
+    smalt map -f bam -n 4 -l pe -i ~{max_insert_size} -j ~{min_insert_size} -r 1 -y 0.5 -o ~{samplename}.bam ~{genome} ~{read1} ~{read2}
     # sort and index
     samtools sort -O bam -o ~{samplename}.sorted.bam ~{samplename}.bam
     samtools index ~{samplename}.sorted.bam
