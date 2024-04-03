@@ -18,9 +18,6 @@ workflow snvphyl_terra {
     String? accession
     Int? window_size
     Int? density_threshold
-    Int? min_coverage
-    Int? min_mean_mapping
-    Float? snv_abundance_ratio
     String? colorscale
     Int? tree_width
   }
