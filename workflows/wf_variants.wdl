@@ -15,6 +15,8 @@ workflow variants {
     Int window_size
     Int density_threshold
     Int min_coverage
+    Int min_mean_mapping
+    Float snv_abundance_ratio
     File genome
     File fai
     File sma
@@ -60,7 +62,9 @@ workflow variants {
       filtered_csi = filter_and_bcf.filtered_csi,
       window_size = window_size,
       density_threshold = density_threshold,
-      min_coverage = min_coverage
+      min_coverage = min_coverage,
+      min_mean_mapping = min_mean_mapping,
+      snv_abundance_ratio = snv_abundance_ratio
   }
  
   output {

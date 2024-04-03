@@ -16,6 +16,8 @@ workflow snvphyl {
     Int window_size = 11
     Int density_threshold = 2
     Int min_coverage = 10
+    Int min_mean_mapping = 30
+    Float snv_abundance_ratio = 0.75
     String? colorscale
     Int? tree_width
   }

@@ -104,10 +104,13 @@ task consolidate_bcf {
     Int window_size
     Int density_threshold
     Int min_coverage
+    Int min_mean_mapping
+    Float snv_abundance_ratio
+
   }
 
   command <<<
-    consolidate_vcfs.pl --coverage-cutoff ~{min_coverage} --min-mean-mapping 30 --snv-abundance-ratio 0.75 --vcfsplit ~{filtered_bcf} --mpileup ~{mpileup_bcf} --filtered-density-out ~{samplename}.filtered-density.txt --window-size ~{window_size} --density-threshold ~{density_threshold} -o ~{samplename}.consolidated.bcf > ~{samplename}.consolidated.vcf
+    consolidate_vcfs.pl --coverage-cutoff ~{min_coverage} --min-mean-mapping ~{min_mean_mapping} --snv-abundance-ratio ~{snv_abundance_ratio} --vcfsplit ~{filtered_bcf} --mpileup ~{mpileup_bcf} --filtered-density-out ~{samplename}.filtered-density.txt --window-size ~{window_size} --density-threshold ~{density_threshold} -o ~{samplename}.consolidated.bcf > ~{samplename}.consolidated.vcf
     bcftools index -f ~{samplename}.consolidated.bcf
   >>>
 
