@@ -38,8 +38,8 @@ task map {
     File fai
     File sma
     File smi
-    Int min_insert_size = 20
-    Int max_insert_size = 1000
+    Int? min_insert_size = 20
+    Int? max_insert_size = 1000
   }
 
   command <<<
