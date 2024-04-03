@@ -45,8 +45,9 @@ workflow snvphyl {
         smi = index.smi,        
         window_size = window_size,
         density_threshold = density_threshold,
-        min_coverage = min_coverage
-
+        min_coverage = min_coverage,
+        min_mean_mapping = min_mean_mapping,
+        snv_abundance_ratio = snv_abundance_ratio
     }
   }
 
