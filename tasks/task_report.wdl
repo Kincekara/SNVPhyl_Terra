@@ -35,7 +35,7 @@ task create_report {
         fasta_header = f.readlines()[0].replace(">", "")
 
     # plot matrix
-    dim = df2.shape[0] / 2
+    dim = df2.shape[0] * 0.6
     fig, ax = plt.subplots(figsize=(dim, dim))
     ax = sns.heatmap(df2, cmap="~{colorscale}", annot=True, cbar=False, fmt="g", linewidths=0.5, square=True)
     ax.xaxis.tick_top()
@@ -58,8 +58,8 @@ task create_report {
     nwk = re.sub(',reference:[0-9]+\\.[0-9]+', '', nwk)
 
     # draw tree
-    tre = toytree.tree(nwk, tree_format=0)
-    canvas, axes, mark = tre.draw(tip_labels_style={"font-size": "13px"}, scalebar=True, width=~{tree_width})
+    tree = toytree.tree(nwk)
+    canvas, axes, mark = tree.draw(tip_labels_style={"font-size": "13px"}, scale_bar=True, width=~{tree_width})
     toyplot.html.render(canvas, "tree-plot.html")
 
     # report style
