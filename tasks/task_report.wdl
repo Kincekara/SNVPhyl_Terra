@@ -7,7 +7,7 @@ task create_report {
     File matrix
     File newick
     String colorscale = "YlGnBu_r"
-    Int tree_width = 600
+    Int tree_width = 800
   }
 
   command <<<
@@ -44,10 +44,6 @@ task create_report {
     with open('heatmap.png','rb') as f:
         b64data = base64.b64encode(f.read())
     bstring = b64data.decode()
-
-    # styled_table = df2.style.background_gradient(cmap="~{colorscale}", axis=None)
-    # styled_table.set_table_styles([{'selector': 'td', 'props': 'text-align: center;'}])
-    # html_table = styled_table.to_html()
 
     ## draw phylogenetic tree
     with open("~{newick}", "r") as f:
