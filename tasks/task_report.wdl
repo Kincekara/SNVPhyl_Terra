@@ -6,13 +6,16 @@ task create_report {
     File vcf2core
     File matrix
     File newick
-    String colorscale = "YlGn_r"
-    Int tree_width = 600
+    String colorscale = "YlGnBu_r"
+    Int tree_width = 800
   }
 
   command <<<
     python3 <<CODE
     import pandas as pd
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+    import base64
     import toytree      
     import toyplot       
     import re     
@@ -32,9 +35,15 @@ task create_report {
         fasta_header = f.readlines()[0].replace(">", "")
 
     # plot matrix
-    styled_table = df2.style.background_gradient(cmap="~{colorscale}", axis=None)
-    styled_table.set_table_styles([{'selector': 'td', 'props': 'text-align: center;'}])
-    html_table = styled_table.to_html()
+    dim = df2.shape[0] * 0.6
+    fig, ax = plt.subplots(figsize=(dim, dim))
+    ax = sns.heatmap(df2, cmap="~{colorscale}", annot=True, cbar=False, fmt="g", linewidths=0.5, square=True)
+    ax.xaxis.tick_top()
+    plt.xticks(rotation=30, ha="left", rotation_mode="anchor")
+    plt.savefig('heatmap.png', bbox_inches='tight')
+    with open('heatmap.png','rb') as f:
+        b64data = base64.b64encode(f.read())
+    bstring = b64data.decode()
 
     ## draw phylogenetic tree
     with open("~{newick}", "r") as f:
@@ -45,8 +54,8 @@ task create_report {
     nwk = re.sub(',reference:[0-9]+\\.[0-9]+', '', nwk)
 
     # draw tree
-    tre = toytree.tree(nwk, tree_format=0)
-    canvas, axes, mark = tre.draw(tip_labels_style={"font-size": "13px"}, scalebar=True, width=~{tree_width})
+    tree = toytree.tree(nwk)
+    canvas, axes, mark = tree.draw(tip_labels_style={"font-size": "13px"}, scale_bar=True, width=~{tree_width})
     toyplot.html.render(canvas, "tree-plot.html")
 
     # report style
@@ -84,7 +93,12 @@ task create_report {
               padding-top: 5px;
               padding-bottom: 5px;
             }        
-                  
+
+            img {
+              max-width: 100%;
+              height: auto;
+            }
+
             footer {
               font-family: Arial, Helvetica, sans-serif;
               font-size: 0.8em;
@@ -105,7 +119,7 @@ task create_report {
         f.write('<p><table><th></th><th></th><tr><td>Reference</td><td>' + fasta_header + "</td><tr>")
         f.write("<tr><td>SNVPhyl core genome</td><td>" + str(core_percent) + "%</td></tr></table><p>")
         f.write("<h2>SNV Matrix</h2>")
-        f.write(html_table)
+        f.write('<img src="data:image/png;base64,' + bstring + '"' + 'alt="Heatmap" />')
         f.write("<h2>Phylogenetic Tree</h2>")
         f.write("<p><p>")
         f.write(html_tree)
@@ -118,7 +132,7 @@ task create_report {
   }
 
   runtime {
-    docker: "kincekara/python-tools:0.1"
+    docker: "kincekara/python-tools:0.2"
     memory: "2 GB"
     cpu: 1
     disks: "local-disk 100 SSD"

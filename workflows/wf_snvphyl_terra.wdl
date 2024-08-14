@@ -45,7 +45,7 @@ workflow snvphyl_terra {
   }
 
   output {
-    String version = "SNVPhyl_Terra v1.0.3"
+    String version = "SNVPhyl_Terra v1.0.4"
     String inputs_check = validate_inputs.check
     File? mapping_quality = snvphyl.mapping_quality
     File? vcf2core = snvphyl.vcf2core
