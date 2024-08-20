@@ -12,7 +12,7 @@ This is a WDL translation of [SNVPhyl_Nextflow](https://github.com/DHQP/SNVPhyl_
 
 The original SNVPhyl pipeline was written by Aaron Petkau. You can find more information in SNVPhyl [paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5628696/) and [documentation](https://snvphyl.readthedocs.io/en/latest/). Please keep in mind that this is an indirect adaptation of SNVPhyl from Jill Hagey's SNVPhyl_Nextflow pipeline.
 
-![snvphyl](https://snvphyl.readthedocs.io/en/latest/images/snvphyl-overview.png)
+![snvphyl](./files/snvphyl.png)
 
 ## Terra
 ### Installation
@@ -37,7 +37,7 @@ Parameters:
 | min_mean_mapping | *{integer} (default: 30)* | minimum mean mapping quality score for all reads in a pileup | optional |
 | snv_abundance_ratio | *{float} (default: 0.75)* | proportion of reads required to support a variant to be included in the analysis| optional |
 | colorscale | *{string} (default: YlGnBu_r)*| background gradient color for SNV matrix. See [colormap](https://matplotlib.org/stable/gallery/color/colormap_reference.html) | optional |
-| tree_width | *{integer} (default: 600)* | phylogenetic tree width | optional |
+| tree_width | *{integer} (default: 800)* | phylogenetic tree width | optional |
 
 ## Local Run
 If you want to use the workflow on your local computer, you can use **wf_snvphyl_local.wdl**, which is prepared for that purpose. You will need a workflow manager (miniwdl or cromwell) and a container runtime (docker, singularity, etc.) in your path.
