@@ -56,7 +56,8 @@ task create_report {
     # draw tree
     tree = toytree.tree(nwk)
     canvas, axes, mark = tree.draw(tip_labels_style={"font-size": "13px"}, scale_bar=True, width=~{tree_width})
-    toyplot.html.render(canvas, "tree-plot.html")
+    #toyplot.html.render(canvas, "tree-plot.html")
+    toyree.save(canvas, "tree-plot.html")
 
     # report style
     style=''' <style>
