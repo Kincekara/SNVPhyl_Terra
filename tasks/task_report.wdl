@@ -32,7 +32,7 @@ task create_report {
 
     # read fasta header
     with open("~{reference}", "r") as f:
-        fasta_header = f.readlines()[0].replace(">", "")
+        fasta_header = f.readlines()[0].replace(">", "").strip()
 
     # plot matrix
     dim = df2.shape[0] * 0.6
@@ -112,18 +112,18 @@ task create_report {
 
     # generate report
     with open("snvphyl_report.html", "w") as f:
-        f.write('<!DOCTYPE html><html lang="en-us"><head><meta charset="UTF-8"><title>SNVPhyl report</title></head>')
-        f.write(style + "</head>")
-        f.write("<body><header><h1>SNVPhyl Report</h1></header><hr><article>")
-        f.write("<h2>Stats</h2>")
+        f.write('<!DOCTYPE html><html lang="en-us"><head><meta charset="UTF-8">\n<title>SNVPhyl report</title>\n')
+        f.write(style + "\n</head>\n")
+        f.write("<body>\n<header><h1>SNVPhyl Report</h1></header>\n<hr>\n<article>\n")
+        f.write("<h2>Stats</h2>\n")
         f.write('<p><table><th></th><th></th><tr><td>Reference</td><td>' + fasta_header + "</td><tr>")
-        f.write("<tr><td>SNVPhyl core genome</td><td>" + str(core_percent) + "%</td></tr></table><p>")
-        f.write("<h2>SNV Matrix</h2>")
-        f.write('<img src="data:image/png;base64,' + bstring + '"' + 'alt="Heatmap" />')
-        f.write("<h2>Phylogenetic Tree</h2>")
-        f.write("<p><p>")
+        f.write("<tr><td>SNVPhyl core genome</td><td>" + str(core_percent) + "%</td></tr></table><p>\n")
+        f.write("<h2>SNV Matrix</h2>\n")
+        f.write('<img src="data:image/png;base64,' + bstring + '"' + 'alt="Heatmap" />\n')
+        f.write("<h2>Phylogenetic Tree</h2>\n")
+        f.write("<p><p>\n")
         f.write(html_tree)
-        f.write("</article><hr><footer>" + footer + "</footer></body></html>")
+        f.write("\n</article>\n<hr>\n<footer>" + footer + "</footer>\n</body>\n</html>\n")
     CODE
   >>>
 
