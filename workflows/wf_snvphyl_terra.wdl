@@ -26,31 +26,31 @@ workflow snvphyl_terra {
     }
     reference: {
       description: "Reference genome file"
-      optional: "true"
+      optional: "true",
       patterns: ["*.fasta", "*.fa", "*.fna"]
     }
     accession: {
-      description: "NCBI Accession number for reference genome"
+      description: "NCBI Accession number for reference genome",
       optional: "true"
     }
     window_size: {
-      description: "Window size for SNVPhyl"
-      optional: "true"
+      description: "Window size for SNVPhyl",
+      optional: "true",
       default: "11"
     }
     density_threshold: {
-      description: "Density threshold for SNVPhyl"
-      optional: "true"
+      description: "Density threshold for SNVPhyl",
+      optional: "true",
       default: "2"
     }
     colorscale: {
-      description: "Color scale for SNVPhyl"
-      optional: "true"
+      description: "Color scale for SNVPhyl",
+      optional: "true",
       default: "YlGnBu_r"
     }
     tree_width: {
-      description: "Tree width for SNVPhyl"
-      optional: "true"
+      description: "Tree width for SNVPhyl",
+      optional: "true",
       default: "800"
     }
   }
