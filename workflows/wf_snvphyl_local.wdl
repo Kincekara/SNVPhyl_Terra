@@ -1,17 +1,15 @@
 version 1.0
 
-import "../tasks/task_smalt.wdl" as smalt
 import "../tasks/task_snvphyl_tools.wdl" as tools
-import "../tasks/task_vcf2snv.wdl" as vcf2snv
-import "../tasks/task_phyml.wdl" as phyml
+import "../tasks/task_vcf2snv.wdl" as vcf_to_snv
+import "../tasks/task_phyml.wdl" as tree
 import "../tasks/task_report.wdl" as report
-
-import "wf_variants.wdl" as variants
+import "wf_variants.wdl" as snv
 
 workflow snvphyl {
   input {
     File inputSamplesFile
-    Array[Array[File]] inputSamples = read_tsv(inputSamplesFile)
+    Array[Array[String]] inputSamples = read_tsv(inputSamplesFile)
     File reference
     Int window_size = 11
     Int density_threshold = 2
@@ -22,27 +20,19 @@ workflow snvphyl {
     Int? tree_width
   }
 
-  call smalt.index {
-    input:
-      genome = reference
-  }
-
   call tools.find_repeats {
     input:
       genome = reference
   }
 
   scatter (sample in inputSamples) {
-    call variants.variants {
+    call snv.variants {
       input:
         samplename = sample[0],
         read1 = sample[1],
         read2 = sample[2],
         reference = reference,
-        genome = index.reference,
-        fai = index.fai,
-        sma = index.sma,
-        smi = index.smi,        
+        genome = reference,   
         window_size = window_size,
         density_threshold = density_threshold,
         min_coverage = min_coverage,
@@ -58,13 +48,13 @@ workflow snvphyl {
       min_depth = min_coverage
   }
 
-  call vcf2snv.vcf2snv {
+  call vcf_to_snv.vcf2snv {
     input:
       filtered_densities = variants.filtered_density,
       consolidated_bcfs = variants.consolidated_bcf,
       consolidated_bcfs_csis = variants.consolidated_bcf_csi,
       invalid_positions = find_repeats.invalid_positions,
-      reference = index.reference
+      reference = reference
   }
 
   call tools.stats_and_matrix {
@@ -73,7 +63,7 @@ workflow snvphyl {
       snvalignment = vcf2snv.snvalignment
   }
 
-  call phyml.phyml {
+  call tree.phyml {
     input:
       snvalignment = vcf2snv.snvalignment
   }
@@ -92,9 +82,13 @@ workflow snvphyl {
     File mapping_quality = verify_map_q.mapping_quality
     File vcf2core = vcf2snv.vcf2core
     File filter_stats = stats_and_matrix.filterstats
+    File snv_alignment = vcf2snv.snvalignment
     File snv_matrix = stats_and_matrix.snvmatrix
     File phyml_tree = phyml.tree
     File phyml_tree_stats = phyml.treestats
     File summary_report = create_report.summary_report
+    File snvalignment = vcf2snv.snvalignment
+    Array[File] bams = variants.sorted_bam_tar
+    Array[File] consolidated_vcfs = variants.consolidated_vcf
   }
 }
