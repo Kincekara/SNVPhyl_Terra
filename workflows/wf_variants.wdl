@@ -2,7 +2,7 @@ version 1.0
 
 import "../tasks/task_smalt.wdl" as smalt
 import "../tasks/task_snvphyl_tools.wdl" as tools
-import "../tasks/task_freebayes.wdl" as freebayes
+import "../tasks/task_freebayes.wdl" as vcf
 import "../tasks/task_bcftools.wdl" as bcftools
 
 workflow variants {
@@ -18,9 +18,6 @@ workflow variants {
     Int min_mean_mapping
     Float snv_abundance_ratio
     File genome
-    File fai
-    File sma
-    File smi
   }
 
   call smalt.map {
@@ -28,13 +25,10 @@ workflow variants {
       samplename = samplename,
       read1 = read1,
       read2 = read2,
-      genome = genome,
-      fai = fai,
-      sma = sma,
-      smi = smi
+      genome = genome      
   }
   
-  call freebayes.freebayes {
+  call vcf.freebayes {
     input:
       samplename = samplename,
       sorted_bam = map.sorted_bam,
@@ -70,6 +64,7 @@ workflow variants {
   output {
     File sorted_bam = map.sorted_bam
     File sorted_bam_bai = map.sorted_bam_bai
+    File sorted_bam_tar = map.sorted_bam_tar
     File consolidated_bcf = consolidate_bcf.consolidated_bcf
     File consolidated_vcf = consolidate_bcf.consolidated_vcf
     File consolidated_bcf_csi = consolidate_bcf.consolidated_bcf_csi
