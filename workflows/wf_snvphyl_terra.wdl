@@ -6,7 +6,53 @@ import "wf_snvphyl_local.wdl" as main
 workflow snvphyl_terra {
 
   meta {
+    author: "Kutluhan Incekara"
+    email: "kutluhan.incekara@ct.gov"
     description: "Terra implementation of SNVPhyl pipeline"  
+  }
+
+  parameter_meta {
+    samplename: {
+      description: "Array of sample names"
+    }
+    read1: {
+      description: "Array of read1 files"
+    }
+    read2: {
+      description: "Array of read2 files"
+    }
+    taxon: {
+      description: "Taxon name"
+    }
+    reference: {
+      description: "Reference genome file"
+      optional: "true"
+      patterns: ["*.fasta", "*.fa", "*.fna"]
+    }
+    accession: {
+      description: "NCBI Accession number for reference genome"
+      optional: "true"
+    }
+    window_size: {
+      description: "Window size for SNVPhyl"
+      optional: "true"
+      default: "11"
+    }
+    density_threshold: {
+      description: "Density threshold for SNVPhyl"
+      optional: "true"
+      default: "2"
+    }
+    colorscale: {
+      description: "Color scale for SNVPhyl"
+      optional: "true"
+      default: "YlGnBu_r"
+    }
+    tree_width: {
+      description: "Tree width for SNVPhyl"
+      optional: "true"
+      default: "800"
+    }
   }
 
   input {
@@ -45,7 +91,7 @@ workflow snvphyl_terra {
   }
 
   output {
-    String version = "SNVPhyl_Terra v1.0.5"
+    String version = "SNVPhyl_Terra v1.0.6"
     String inputs_check = validate_inputs.check
     File? mapping_quality = snvphyl.mapping_quality
     File? vcf2core = snvphyl.vcf2core
