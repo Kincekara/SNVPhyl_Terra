@@ -25,7 +25,7 @@ workflow snvphyl_terra {
       description: "Taxon name"
     }
     reference: {
-      description: "Reference genome file"
+      description: "Reference genome file",
       optional: "true",
       patterns: ["*.fasta", "*.fa", "*.fna"]
     }
