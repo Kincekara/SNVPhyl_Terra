@@ -37,13 +37,13 @@ task verify_map_q {
   # prep bams
   bams=(~{sep=' ' sorted_bams})
   count=0 
-  for f in ${bams[@]}; do
+  for f in "${bams[@]}"; do
     ((count++))
     echo "--bam bam$count=$f " | tr -d "\n" >> bam_line.txt
   done
   bam_cmd=$(cat bam_line.txt)
   # mapping quality
-  verify_mapping_quality.pl -c 4 --min-depth ~{min_depth} --min-map 80 --output mappingQuality.txt $bam_cmd
+  verify_mapping_quality.pl -c 4 --min-depth ~{min_depth} --min-map 80 --output mappingQuality.txt "$bam_cmd"
   >>>
 
   output {

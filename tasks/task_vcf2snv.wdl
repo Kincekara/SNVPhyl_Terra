@@ -12,8 +12,8 @@ task vcf2snv {
   command <<<
     # merge filtered densities
     fpaths=(~{sep=' ' filtered_densities})
-    for file in ${fpaths[@]}; do
-      cat $file
+    for file in "${fpaths[@]}"; do
+      cat "$file"
     done > filtered_density_all.txt
 
     # merge filtered densities and invalid positions
@@ -21,14 +21,14 @@ task vcf2snv {
 
     # prep bcfs
     bpath=(~{sep=' ' consolidated_bcfs})
-    for f in ${bpath[@]}; do
-      fname=$(basename $f .consolidated.bcf)
+    for f in "${bpath[@]}"; do
+      fname=$(basename "$f" .consolidated.bcf)
       echo "--consolidate_vcf $fname=$f " | tr -d "\n" >> consolidation_line.txt
     done
     consolidate_cmd=$(cat consolidation_line.txt)
 
     # vcf2snv
-    vcf2snv_alignment.pl --reference reference --invalid-pos new_invalid_positions.bed --format fasta --format phylip --numcpus 4 --output-base snvalign --fasta ~{reference} $consolidate_cmd
+    vcf2snv_alignment.pl --reference reference --invalid-pos new_invalid_positions.bed --format fasta --format phylip --numcpus 4 --output-base snvalign --fasta ~{reference} "$consolidate_cmd"
     mv snvalign-positions.tsv snvTable.tsv
     mv snvalign-stats.csv vcf2core.tsv
     if [[ -f snvalign.phy ]]; then
