@@ -12,13 +12,8 @@ task map {
   }
 
   command <<<  
-    # check & copy reference
-    if [[ "~{genome}" == *.gz ]]; then
-      cp ~{genome} ./~{filename}.gz
-      gunzip ~{filename}.gz
-    else
-      cp ~{genome} ./~{filename}
-    fi
+    # copy reference to local directory
+    cp ~{genome} ./~{filename}
     # index reference
     smalt index -k 13 -s 6 ~{filename} ~{genome}    
     samtools faidx ~{filename}  

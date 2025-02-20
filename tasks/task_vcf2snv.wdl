@@ -20,15 +20,14 @@ task vcf2snv {
     cat filtered_density_all.txt ~{invalid_positions}> new_invalid_positions.bed
 
     # prep bcfs
-    bpath=(~{sep=' ' consolidated_bcfs})
-    for f in "${bpath[@]}"; do
+    consolidate_cmd=""
+    for f in ~{sep=' ' consolidated_bcfs}; do
       fname=$(basename "$f" .consolidated.bcf)
-      echo "--consolidate_vcf $fname=$f " | tr -d "\n" >> consolidation_line.txt
+      consolidate_cmd+="--consolidate_vcf $fname=$f "
     done
-    consolidate_cmd=$(cat consolidation_line.txt)
-
+ 
     # vcf2snv
-    vcf2snv_alignment.pl --reference reference --invalid-pos new_invalid_positions.bed --format fasta --format phylip --numcpus 4 --output-base snvalign --fasta ~{reference} "$consolidate_cmd"
+    vcf2snv_alignment.pl --reference reference --invalid-pos new_invalid_positions.bed --format fasta --format phylip --numcpus 4 --output-base snvalign --fasta ~{reference} $consolidate_cmd
     mv snvalign-positions.tsv snvTable.tsv
     mv snvalign-stats.csv vcf2core.tsv
     if [[ -f snvalign.phy ]]; then
