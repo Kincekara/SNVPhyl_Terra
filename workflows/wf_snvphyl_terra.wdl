@@ -78,27 +78,28 @@ workflow snvphyl_terra {
     accession = accession
   }
 
-  if ( validate_inputs.check == "PASS" ) {
-    call main.snvphyl {
-      input:
-      inputSamplesFile = validate_inputs.samplelist,
-      reference = validate_inputs.ref_genome,
-      window_size = window_size,
-      density_threshold = density_threshold,
-      colorscale = colorscale,
-      tree_width = tree_width
-    }
+  call main.snvphyl {
+    input:
+    inputSamplesFile = validate_inputs.samplelist,
+    reference = validate_inputs.ref_genome,
+    window_size = window_size,
+    density_threshold = density_threshold,
+    colorscale = colorscale,
+    tree_width = tree_width
   }
 
   output {
-    String version = "SNVPhyl_Terra v1.0.6"
+    String version = snvphyl.version
     String inputs_check = validate_inputs.check
-    File? mapping_quality = snvphyl.mapping_quality
-    File? vcf2core = snvphyl.vcf2core
-    File? filter_stats = snvphyl.filter_stats
-    File? snv_matrix = snvphyl.snv_matrix
-    File? phyml_tree = snvphyl.phyml_tree
-    File? phyml_tree_stats = snvphyl.phyml_tree_stats
-    File? summary_report = snvphyl.summary_report
+    File mapping_quality = snvphyl.mapping_quality
+    File vcf2core = snvphyl.vcf2core
+    File filter_stats = snvphyl.filter_stats
+    File snv_matrix = snvphyl.snv_matrix
+    File phyml_tree = snvphyl.phyml_tree
+    File phyml_tree_stats = snvphyl.phyml_tree_stats
+    File summary_report = snvphyl.summary_report
+    File snvalignment = snvphyl.snvalignment
+    Array[File] bams = snvphyl.bams
+    Array[File] consolidated_vcfs = snvphyl.consolidated_vcfs
   }
 }
