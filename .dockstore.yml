@@ -4,4 +4,4 @@ workflows:
    subclass: WDL
    primaryDescriptorPath: /workflows/wf_snvphyl_terra.wdl
    testParameterFiles:
-    - /files/empty.json
+    - /assets/empty.json
