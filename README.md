@@ -8,11 +8,11 @@ This is a WDL translation of [SNVPhyl_Nextflow](https://github.com/DHQP/SNVPhyl_
 2. Some key parameters (min_coverage, min_mean_mapping, snv_abundance_ratio) are exposed as variables like in the original SNVPhyl pipeline.
 
 3. This pipeline creates an HTML summary report besides the standard outputs of SNVPhyl. The report contains a heatmap-styled SNV matrix and a phylogenetic tree. 
-<br>[Example report](https://htmlpreview.github.io/?https://github.com/Kincekara/SNVPhyl_Terra/blob/main/files/snvphyl_report.html)
+<br>[Example report](https://htmlpreview.github.io/?https://github.com/Kincekara/SNVPhyl_Terra/blob/main/assets/snvphyl_report.html)
 
 The original SNVPhyl pipeline was written by Aaron Petkau. You can find more information in SNVPhyl [paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5628696/) and [documentation](https://snvphyl.readthedocs.io/en/latest/). Please keep in mind that this is an indirect adaptation of SNVPhyl from Jill Hagey's SNVPhyl_Nextflow pipeline.
 
-![snvphyl](./files/snvphyl.png)
+![snvphyl](./assets/snvphyl.png)
 
 ## Terra
 ### Installation
