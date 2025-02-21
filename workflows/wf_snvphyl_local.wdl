@@ -79,6 +79,7 @@ workflow snvphyl {
   }
 
   output {
+    String version = "SNVPhyl_Terra v1.0.6"
     File mapping_quality = verify_map_q.mapping_quality
     File vcf2core = vcf2snv.vcf2core
     File filter_stats = stats_and_matrix.filterstats
