@@ -95,10 +95,10 @@ workflow snvphyl_terra {
     File vcf2core = snvphyl.vcf2core
     File filter_stats = snvphyl.filter_stats
     File snv_matrix = snvphyl.snv_matrix
+    File snv_alignment = snvphyl.snv_alignment
     File phyml_tree = snvphyl.phyml_tree
     File phyml_tree_stats = snvphyl.phyml_tree_stats
     File summary_report = snvphyl.summary_report
-    File snvalignment = snvphyl.snvalignment
     Array[File] bams = snvphyl.bams
     Array[File] consolidated_vcfs = snvphyl.consolidated_vcfs
   }

@@ -88,7 +88,6 @@ workflow snvphyl {
     File phyml_tree = phyml.tree
     File phyml_tree_stats = phyml.treestats
     File summary_report = create_report.summary_report
-    File snvalignment = vcf2snv.snvalignment
     Array[File] bams = variants.sorted_bam_tar
     Array[File] consolidated_vcfs = variants.consolidated_vcf
   }
