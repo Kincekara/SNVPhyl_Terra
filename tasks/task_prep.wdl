@@ -53,11 +53,11 @@ task validate_inputs {
       mv ~{reference} reference.fasta
     elif [ -n "~{accession}" ]; then
       datasets download genome accession ~{accession} --include genome --filename reference.zip
-      unzip -j -p reference.zip ./*.fna > reference.fasta
+      unzip -j -p reference.zip *.fna > reference.fasta
     elif [ -n "~{taxon}" ]; then
       id=$(datasets summary genome taxon "~{taxon}" --reference | cut -d "," -f1 | cut -d ":" -f3 | sed 's/\"//g')
       datasets download genome accession "$id" --include genome --filename reference.zip
-      unzip -j -p reference.zip ./*.fna > reference.fasta
+      unzip -j -p reference.zip *.fna > reference.fasta
     else
       echo "No reference information provided! Please give one of them: reference file, toxon or accession id"
       echo "FAIL" > INPUT.CHECK
