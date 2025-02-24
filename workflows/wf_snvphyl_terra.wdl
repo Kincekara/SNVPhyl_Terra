@@ -6,7 +6,53 @@ import "wf_snvphyl_local.wdl" as main
 workflow snvphyl_terra {
 
   meta {
+    author: "Kutluhan Incekara"
+    email: "kutluhan.incekara@ct.gov"
     description: "Terra implementation of SNVPhyl pipeline"  
+  }
+
+  parameter_meta {
+    samplename: {
+      description: "Array of sample names"
+    }
+    read1: {
+      description: "Array of read1 files"
+    }
+    read2: {
+      description: "Array of read2 files"
+    }
+    taxon: {
+      description: "Taxon name"
+    }
+    reference: {
+      description: "Reference genome file",
+      optional: "true",
+      patterns: ["*.fasta", "*.fa", "*.fna"]
+    }
+    accession: {
+      description: "NCBI Accession number for reference genome",
+      optional: "true"
+    }
+    window_size: {
+      description: "Window size for SNVPhyl",
+      optional: "true",
+      default: "11"
+    }
+    density_threshold: {
+      description: "Density threshold for SNVPhyl",
+      optional: "true",
+      default: "2"
+    }
+    colorscale: {
+      description: "Color scale for SNVPhyl",
+      optional: "true",
+      default: "YlGnBu_r"
+    }
+    tree_width: {
+      description: "Tree width for SNVPhyl",
+      optional: "true",
+      default: "800"
+    }
   }
 
   input {
@@ -32,27 +78,28 @@ workflow snvphyl_terra {
     accession = accession
   }
 
-  if ( validate_inputs.check == "PASS" ) {
-    call main.snvphyl {
-      input:
-      inputSamplesFile = validate_inputs.samplelist,
-      reference = validate_inputs.ref_genome,
-      window_size = window_size,
-      density_threshold = density_threshold,
-      colorscale = colorscale,
-      tree_width = tree_width
-    }
+  call main.snvphyl {
+    input:
+    inputSamplesFile = validate_inputs.samplelist,
+    reference = validate_inputs.ref_genome,
+    window_size = window_size,
+    density_threshold = density_threshold,
+    colorscale = colorscale,
+    tree_width = tree_width
   }
 
   output {
-    String version = "SNVPhyl_Terra v1.0.5"
+    String version = snvphyl.version
     String inputs_check = validate_inputs.check
-    File? mapping_quality = snvphyl.mapping_quality
-    File? vcf2core = snvphyl.vcf2core
-    File? filter_stats = snvphyl.filter_stats
-    File? snv_matrix = snvphyl.snv_matrix
-    File? phyml_tree = snvphyl.phyml_tree
-    File? phyml_tree_stats = snvphyl.phyml_tree_stats
-    File? summary_report = snvphyl.summary_report
+    File mapping_quality = snvphyl.mapping_quality
+    File vcf2core = snvphyl.vcf2core
+    File filter_stats = snvphyl.filter_stats
+    File snv_matrix = snvphyl.snv_matrix
+    File snv_alignment = snvphyl.snv_alignment
+    File phyml_tree = snvphyl.phyml_tree
+    File phyml_tree_stats = snvphyl.phyml_tree_stats
+    File summary_report = snvphyl.summary_report
+    Array[File] bams = snvphyl.bams
+    Array[File] consolidated_vcfs = snvphyl.consolidated_vcfs
   }
 }
