@@ -4,6 +4,7 @@ import "../tasks/task_snvphyl_tools.wdl" as tools
 import "../tasks/task_vcf2snv.wdl" as vcf_to_snv
 import "../tasks/task_phyml.wdl" as tree
 import "../tasks/task_report.wdl" as report
+import "../tasks/task_collect.wdl" as collect
 import "wf_variants.wdl" as snv
 
 workflow snvphyl {
@@ -77,6 +78,13 @@ workflow snvphyl {
       tree_width = tree_width
   }
 
+  call collect.collect_files {
+    input:
+      bams = variants.sorted_bam,
+      bais = variants.sorted_bam_bai,
+      vcfs = variants.consolidated_vcf
+  }
+
   output {
     String version = "SNVPhyl_Terra v1.0.7"
     File mapping_quality = verify_map_q.mapping_quality
@@ -87,7 +95,6 @@ workflow snvphyl {
     File phyml_tree = phyml.tree
     File phyml_tree_stats = phyml.treestats
     File summary_report = create_report.summary_report
-    Array[File] bams = variants.sorted_bam_tar
-    Array[File] consolidated_vcfs = variants.consolidated_vcf
+    File intermediate_files = collect_files.intermediate_files
   }
 }

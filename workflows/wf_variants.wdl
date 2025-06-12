@@ -64,7 +64,6 @@ workflow variants {
   output {
     File sorted_bam = map.sorted_bam
     File sorted_bam_bai = map.sorted_bam_bai
-    File sorted_bam_tar = map.sorted_bam_tar
     File consolidated_bcf = consolidate_bcf.consolidated_bcf
     File consolidated_vcf = consolidate_bcf.consolidated_vcf
     File consolidated_bcf_csi = consolidate_bcf.consolidated_bcf_csi
