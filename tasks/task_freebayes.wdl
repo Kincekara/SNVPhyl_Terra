@@ -5,6 +5,7 @@ task freebayes {
     String samplename
     File sorted_bam
     File reference
+    File reference_fai
   }
 
   command <<<

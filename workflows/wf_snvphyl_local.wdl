@@ -32,7 +32,6 @@ workflow snvphyl {
         read1 = sample[1],
         read2 = sample[2],
         reference = reference,
-        genome = reference,   
         window_size = window_size,
         density_threshold = density_threshold,
         min_coverage = min_coverage,

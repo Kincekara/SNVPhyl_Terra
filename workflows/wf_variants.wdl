@@ -17,7 +17,6 @@ workflow variants {
     Int min_coverage
     Int min_mean_mapping
     Float snv_abundance_ratio
-    File genome
   }
 
   call smalt.map {
@@ -25,14 +24,15 @@ workflow variants {
       samplename = samplename,
       read1 = read1,
       read2 = read2,
-      genome = genome      
+      genome = reference      
   }
   
   call vcf.freebayes {
     input:
       samplename = samplename,
       sorted_bam = map.sorted_bam,
-      reference = reference
+      reference = map.reference,
+      reference_fai = map.reference_fai
   }
 
   call tools.filter_and_bcf {

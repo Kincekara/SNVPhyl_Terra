@@ -29,6 +29,8 @@ task map {
     File sorted_bam = "~{samplename}.sorted.bam"
     File sorted_bam_bai = "~{samplename}.sorted.bam.bai"
     File sorted_bam_tar = "~{samplename}.sorted.bam.tar.gz"
+    File reference = "~{filename}"
+    File reference_fai = "~{filename}.fai"
   }
 
   runtime {
