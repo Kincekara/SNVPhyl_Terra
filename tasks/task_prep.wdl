@@ -38,8 +38,8 @@ task validate_inputs {
       fi
       # Create samples.tsv
       for (( i=0; i<len; i++ )); do
-        read1=$(echo "${r1[i]}" | sed 's/\/cromwell_root/gs\:\//g')
-        read2=$(echo "${r2[i]}" | sed 's/\/cromwell_root/gs\:\//g')
+        read1=$(echo "${r1[i]}" | sed 's/\/mnt\/disk\/cromwell_root/gs\:\//g')
+        read2=$(echo "${r2[i]}" | sed 's/\/mnt\/disk\/cromwell_root/gs\:\//g')
         echo -e "${samples[i]}\t$read1\t$read2" >> "samples.tsv"
       done
     else
