@@ -22,13 +22,13 @@ task map {
     # sort and index
     samtools sort -O bam -o ~{samplename}.sorted.bam ~{samplename}.bam
     samtools index ~{samplename}.sorted.bam
-    tar -czvf ~{samplename}.sorted.bam.tar.gz ~{samplename}.sorted.bam ~{samplename}.sorted.bam.bai
   >>>
 
   output {
     File sorted_bam = "~{samplename}.sorted.bam"
     File sorted_bam_bai = "~{samplename}.sorted.bam.bai"
-    File sorted_bam_tar = "~{samplename}.sorted.bam.tar.gz"
+    File reference = "~{filename}"
+    File reference_fai = "~{filename}.fai"
   }
 
   runtime {

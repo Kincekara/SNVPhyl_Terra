@@ -99,7 +99,6 @@ workflow snvphyl_terra {
     File phyml_tree = snvphyl.phyml_tree
     File phyml_tree_stats = snvphyl.phyml_tree_stats
     File summary_report = snvphyl.summary_report
-    Array[File] bams = snvphyl.bams
-    Array[File] consolidated_vcfs = snvphyl.consolidated_vcfs
+    File intermediate_files = snvphyl.intermediate_files
   }
 }
