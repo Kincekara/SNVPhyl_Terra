@@ -19,6 +19,7 @@ workflow snvphyl {
     Float snv_abundance_ratio = 0.75
     String? colorscale
     Int? tree_width
+    Boolean intermediate_files = false
   }
 
   call tools.find_repeats {
@@ -78,11 +79,13 @@ workflow snvphyl {
       tree_width = tree_width
   }
 
-  call collect.collect_files {
-    input:
-      bams = variants.sorted_bam,
-      bais = variants.sorted_bam_bai,
-      vcfs = variants.consolidated_vcf
+  if (intermediate_files) {
+    call collect.collect_files {
+      input:
+        bams = variants.sorted_bam,
+        bais = variants.sorted_bam_bai,
+        vcfs = variants.consolidated_vcf
+    }
   }
 
   output {
@@ -95,6 +98,6 @@ workflow snvphyl {
     File phyml_tree = phyml.tree
     File phyml_tree_stats = phyml.treestats
     File summary_report = create_report.summary_report
-    File intermediate_files = collect_files.intermediate_files
+    File? bams_and_vcfs = collect_files.intermediate_files
   }
 }
