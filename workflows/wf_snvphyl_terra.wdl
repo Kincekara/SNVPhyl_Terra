@@ -53,6 +53,11 @@ workflow snvphyl_terra {
       optional: "true",
       default: "800"
     }
+    intermediate_files: {
+      description: "Whether to collect bam and vcf files into a tarball",
+      optional: "true",
+      default: "false"
+    }
   }
 
   input {
@@ -66,6 +71,7 @@ workflow snvphyl_terra {
     Int? density_threshold
     String? colorscale
     Int? tree_width
+    Boolean? intermediate_files
   }
 
   call prep.validate_inputs {
@@ -85,7 +91,8 @@ workflow snvphyl_terra {
     window_size = window_size,
     density_threshold = density_threshold,
     colorscale = colorscale,
-    tree_width = tree_width
+    tree_width = tree_width,
+    intermediate_files = intermediate_files,
   }
 
   output {
@@ -99,6 +106,6 @@ workflow snvphyl_terra {
     File phyml_tree = snvphyl.phyml_tree
     File phyml_tree_stats = snvphyl.phyml_tree_stats
     File summary_report = snvphyl.summary_report
-    File intermediate_files = snvphyl.intermediate_files
+    File? bams_and_vcfs = snvphyl.bams_and_vcfs
   }
 }
