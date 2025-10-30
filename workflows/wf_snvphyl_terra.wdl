@@ -58,6 +58,11 @@ workflow snvphyl_terra {
       optional: "true",
       default: "false"
     }
+    mask_prophage: {
+      description: "mask prophage sequences in reference genome",
+      optional: "true",
+      default: "false"
+    }
   }
 
   input {
@@ -72,6 +77,7 @@ workflow snvphyl_terra {
     String? colorscale
     Int? tree_width
     Boolean? intermediate_files
+    Boolean? mask_prophage
   }
 
   call prep.validate_inputs {
@@ -93,6 +99,7 @@ workflow snvphyl_terra {
     colorscale = colorscale,
     tree_width = tree_width,
     intermediate_files = intermediate_files,
+    mask_prophage = mask_prophage
   }
 
   output {
@@ -107,5 +114,6 @@ workflow snvphyl_terra {
     File phyml_tree_stats = snvphyl.phyml_tree_stats
     File summary_report = snvphyl.summary_report
     File? bams_and_vcfs = snvphyl.bams_and_vcfs
+    File? phage_sites = snvphyl.phage_sites
   }
 }

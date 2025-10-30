@@ -1,11 +1,13 @@
 version 1.0
 
+import "../tasks/task_phastest.wdl" as phastest
 import "../tasks/task_snvphyl_tools.wdl" as tools
 import "../tasks/task_vcf2snv.wdl" as vcf_to_snv
 import "../tasks/task_phyml.wdl" as tree
 import "../tasks/task_report.wdl" as report
 import "../tasks/task_collect.wdl" as collect
 import "wf_variants.wdl" as snv
+
 
 workflow snvphyl {
   input {
@@ -20,11 +22,19 @@ workflow snvphyl {
     String? colorscale
     Int? tree_width
     Boolean intermediate_files = false
+    Boolean mask_prophage = false
   }
 
   call tools.find_repeats {
     input:
       genome = reference
+  }
+
+  if (mask_prophage) {
+    call phastest.phastest {
+      input:
+        genome = reference
+    }
   }
 
   scatter (sample in inputSamples) {
@@ -55,7 +65,8 @@ workflow snvphyl {
       consolidated_bcfs = variants.consolidated_bcf,
       consolidated_bcfs_csis = variants.consolidated_bcf_csi,
       invalid_positions = find_repeats.invalid_positions,
-      reference = reference
+      reference = reference,
+      mask_file = phastest.phage_bed
   }
 
   call tools.stats_and_matrix {
@@ -89,7 +100,7 @@ workflow snvphyl {
   }
 
   output {
-    String version = "SNVPhyl_Terra v1.0.7"
+    String version = "SNVPhyl_Terra v1.1.0"
     File mapping_quality = verify_map_q.mapping_quality
     File vcf2core = vcf2snv.vcf2core
     File filter_stats = stats_and_matrix.filterstats
@@ -99,5 +110,6 @@ workflow snvphyl {
     File phyml_tree_stats = phyml.treestats
     File summary_report = create_report.summary_report
     File? bams_and_vcfs = collect_files.intermediate_files
+    File? phage_sites = phastest.phage_json
   }
 }

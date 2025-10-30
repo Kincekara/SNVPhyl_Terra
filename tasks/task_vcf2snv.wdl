@@ -7,6 +7,7 @@ task vcf2snv {
     Array[File] consolidated_bcfs_csis
     File invalid_positions
     File reference
+    File? mask_file
   }
 
   command <<<
@@ -17,7 +18,11 @@ task vcf2snv {
     done > filtered_density_all.txt
 
     # merge filtered densities and invalid positions
-    cat filtered_density_all.txt ~{invalid_positions}> new_invalid_positions.bed
+    if [[ -f ~{mask_file} ]]; then
+      cat filtered_density_all.txt ~{invalid_positions} ~{mask_file} > new_invalid_positions.bed
+    else
+      cat filtered_density_all.txt ~{invalid_positions} > new_invalid_positions.bed
+    fi
 
     # prep bcfs
     consolidate_cmd=""
